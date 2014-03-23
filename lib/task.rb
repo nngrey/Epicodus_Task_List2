@@ -1,9 +1,10 @@
 class Task
 
-	attr_reader :name, :id
+	attr_reader :name, :id, :list_id
 
 	def initialize(attributes)
 		@name = attributes['name']
+		@list_id = attributes['list_id']
 		@id = attributes['id']
 	end
 
@@ -12,7 +13,8 @@ class Task
 		tasks = []
 		results.each do |result|
 			name = result['name']
-			new_task = Task.new({'name' => name})
+			list_id = result['list_id']
+			new_task = Task.new({'name' => name, 'list_id' => list_id})
 			tasks << new_task
 		end
 		tasks
@@ -25,12 +27,12 @@ class Task
 	end
 
 	def save
-		results = DB.exec("INSERT INTO tasks (name) VALUES ('#{@name}') RETURNING id;")
+		results = DB.exec("INSERT INTO tasks (name, list_id) VALUES ('#{@name}', '#{list_id}') RETURNING id;")
 		@id = results.first['id']
 	end
 
-	def update(name)
-		DB.exec("UPDATE tasks SET name = '#{name}' WHERE id = #{self.id};")
+	def update_name(new_name)
+		DB.exec("UPDATE tasks SET name = '#{new_name}' WHERE id = #{self.id};")
 	end
 
 	def delete

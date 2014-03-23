@@ -16,11 +16,33 @@ describe List do
 		end
 	end
 
+	describe ".create" do
+		it "initializes and saves an instance of List" do
+			test_list = List.create({'name' => 'chores'})
+			List.all.should eq [test_list]
+		end
+	end
+
 	describe "#save" do
 		it "saves and instance of List to an array of all lists" do
 			test_list = List.new({'name' => 'chores'})
 			test_list.save
 			List.all.should eq [test_list]
+		end
+	end
+
+	describe "#update_name" do
+		it 'updates the name of an instance' do
+			test_list = List.create({'name' => 'home chores'})
+			test_list.update_name('work chores')
+		end
+	end
+
+	describe "#delete" do
+		it 'deletes the instance of List' do
+			test_list = List.create({'name' => 'chores'})
+			test_list.delete
+			List.all.should eq []
 		end
 	end
 
